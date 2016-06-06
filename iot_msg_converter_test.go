@@ -88,6 +88,7 @@ func TestConvertIotMsgToBytesV1(t *testing.T) {
 	iotMsg := NewIotMsg(MsgTypeCmd,"level","thermostat",nil)
 	iotMsg.SetDefaultFloat(20.5,"")
 	iotMsg.SetStrProperty("setpoint_type","heating")
+	iotMsg.Topic = "jim1/cmd/ta/zw/1/lvl_thermostat/1"
 	byt ,err := ConvertIotMsgToBytes("jim1/cmd/ta/zw/1/lvl_thermostat/1",iotMsg,nil)
 	if err != nil {
 		t.Error(err)
