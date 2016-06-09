@@ -43,7 +43,7 @@ type IotMsgEvtV0 struct {
 		Target string `json:"target"`
 		Properties map[string]interface{} `json:"properties"`
 		Type string `json:"@type"`
-	} `json:"command"`
+	} `json:"event"`
 	Spid string `json:"spid"`
 	Corid string `json:"corid"`
 	Context string `json:"@context"`

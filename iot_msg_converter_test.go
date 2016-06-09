@@ -67,6 +67,20 @@ func TestConvertIotMsgToBytesV0(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	t.Log(" \n Type autodetect \n")
+	t.Log(string(byt))
+}
+
+func TestConvertIotMsgToBytesV1_overrideType(t *testing.T) {
+	config := map[string]string{"SPID":"JR-1243","override_payload_type":"jim1"}
+	iotMsg := NewIotMsg(MsgTypeCmd,"level","thermostat",nil)
+	iotMsg.SetDefaultFloat(20.5,"")
+	iotMsg.SetStrProperty("setpoint_type","heating")
+	byt ,err := ConvertIotMsgToBytes("/dev/zw/16/lvl_thermostat/1/commands",iotMsg,config)
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(" \n Overriding type to jim1 \n")
 	t.Log(string(byt))
 }
 
