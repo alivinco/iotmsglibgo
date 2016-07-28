@@ -19,7 +19,14 @@ func DetectPayloadType(topic string)(IotMsgPayloadType,error){
 }
 // Converts bytes slice into IotMsg
 func ConvertBytesToIotMsg(topic string,byteMsg []byte,configs map[string]string)(*IotMsg,error)  {
-	payloadType,err := DetectPayloadType(topic)
+	ptype,s := configs["override_payload_type"]
+	var payloadType IotMsgPayloadType
+	var err error
+	if s {
+		payloadType,err = DetectPayloadType(ptype)
+	}else {
+		payloadType, err = DetectPayloadType(topic)
+	}
 	if err != nil {
 		return nil,err
 	}
