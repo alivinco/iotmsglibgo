@@ -113,7 +113,7 @@ func EncodeIotMsgToJsonStrV1 (msg *IotMsg)([]byte,error){
 	r.Ctime = msg.Timestamp.Format(time.RFC3339)
 	r.Corid = msg.Corid
 	r.Ver = msg.Version
-	r.Topic = msg.Topic
+	//r.Topic = msg.Topic
 	jsonBA,err := json.Marshal(r)
 	return jsonBA,err
 }
