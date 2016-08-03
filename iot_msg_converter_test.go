@@ -56,6 +56,9 @@ func TestConvertBytesToIotMsgV0(t *testing.T) {
 		t.Log(err)
 		t.Fail()
 	}
+	if iotMsg.Type != MsgTypeCmd || iotMsg.Class != "level" {
+		t.Error("Wrong msg type of class ")
+	}
 	t.Log(iotMsg.String())
 }
 func TestConvertIotMsgToBytesV0(t *testing.T) {

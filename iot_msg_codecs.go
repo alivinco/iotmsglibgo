@@ -3,7 +3,7 @@ package iotmsglibgo
 import (
 	"github.com/alivinco/iotmsglibgo/json-types"
 	"encoding/json"
-	"strings"
+	//"strings"
 	"time"
 )
 
@@ -60,12 +60,21 @@ func DecodeIotMsgToJsonMsgStrV0 (msg []byte,topic string )(*IotMsg ,error){
 	var iotMsg *IotMsg
 	var msgType IotMsgType
 
-	if strings.Contains(topic,"commands"){
-		msgType = MsgTypeCmd
-	} else {
-		msgType = MsgTypeEvt
+	//if strings.Contains(topic,"commands"){
+	//	msgType = MsgTypeCmd
+	//} else {
+	//	msgType = MsgTypeEvt
+	//}
+	v0msg := json_types.IotMsgV0{}
+	err := json.Unmarshal(msg,&v0msg)
+	if err != nil{
+			return nil,err
 	}
-
+	if v0msg.Command.Type == "" {
+		msgType = MsgTypeEvt
+	}else{
+		msgType = MsgTypeCmd
+	}
 	switch msgType {
 	case MsgTypeCmd:
 		v0msg := json_types.IotMsgCmdV0{}
