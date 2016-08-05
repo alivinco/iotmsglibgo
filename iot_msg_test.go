@@ -9,7 +9,7 @@ func TestNewIotMsg(t *testing.T) {
 	msg.SetDefaultStr("test value", "")
 	msg.SetStrProperty("prop1","value1")
 	t.Log(msg.String())
-	if msg.GetDefaultStr() != "test value" {
+	if r ,_ := msg.GetDefaultStr(); r != "test value" {
 		t.Failed()
 	}
 	if msg.GetStrProperty("prop1") != "value1" {

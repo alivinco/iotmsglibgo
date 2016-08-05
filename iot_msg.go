@@ -1,9 +1,11 @@
 package iotmsglibgo
 
 import (
-	"github.com/satori/go.uuid"
-	"time"
+	"errors"
 	"fmt"
+	"github.com/satori/go.uuid"
+	"strconv"
+	"time"
 )
 
 const (
@@ -63,12 +65,12 @@ type IotMsg struct {
 
 func NewIotMsg(msgType IotMsgType, msgClass string, msgSubClass string, reqMsg *IotMsg) *IotMsg {
 	iotMsg := IotMsg{Type: msgType,
-		Class:    msgClass,
-		SubClass: msgSubClass,
-		Timestamp:   time.Now(),
-		Uuid:        uuid.NewV4().String(),
+		Class:     msgClass,
+		SubClass:  msgSubClass,
+		Timestamp: time.Now(),
+		Uuid:      uuid.NewV4().String(),
 	}
-	if reqMsg != nil{
+	if reqMsg != nil {
 		iotMsg.Corid = reqMsg.Uuid
 	}
 	return &iotMsg
@@ -77,8 +79,19 @@ func NewIotMsg(msgType IotMsgType, msgClass string, msgSubClass string, reqMsg *
 func (msg *IotMsg) SetDefaultStr(value string, unit string) {
 	msg.Default = IotMsgDefault{Value: value, Unit: unit, Type: "string"}
 }
-func (msg *IotMsg) GetDefaultStr() string {
-	return msg.Default.Value.(string)
+func (msg *IotMsg) GetDefaultStr() (string,error) {
+	switch v := msg.Default.Value.(type) {
+	case float64 , float32:
+		return strconv.FormatFloat(v.(float64), 'f', -1, 64), nil
+	case string:
+		return v , nil
+	case int:
+		return strconv.Itoa(v), nil
+	case bool:
+		return strconv.FormatBool(v) , nil
+	default:
+		return "", errors.New("Variable can't be converted into string")
+	}
 }
 func (msg *IotMsg) SetDefaultBool(value bool, unit string) {
 	msg.Default = IotMsgDefault{Value: value, Unit: unit, Type: "bool"}
@@ -86,11 +99,26 @@ func (msg *IotMsg) SetDefaultBool(value bool, unit string) {
 func (msg *IotMsg) GetDefaultBool() bool {
 	return msg.Default.Value.(bool)
 }
-func (msg *IotMsg) SetDefaultInt(value int32, unit string) {
+func (msg *IotMsg) SetDefaultInt(value int, unit string) {
 	msg.Default = IotMsgDefault{Value: value, Unit: unit, Type: "int"}
 }
-func (msg *IotMsg) GetDefaultInt() int32 {
-	return msg.Default.Value.(int32)
+func (msg *IotMsg) GetDefaultInt() (int, error) {
+	switch v := msg.Default.Value.(type) {
+	case float64 , float32:
+		return int(v.(float64)), nil
+	case string:
+		return strconv.Atoi(v)
+	case int:
+		return v, nil
+	case bool:
+		if v {
+			return 1 , nil
+		} else {
+			return 0 , nil
+		}
+	default:
+		return 0, errors.New("Variable can't be converted into int")
+	}
 }
 func (msg *IotMsg) SetDefaultFloat(value float64, unit string) {
 	msg.Default = IotMsgDefault{Value: value, Unit: unit, Type: "float"}
@@ -114,12 +142,12 @@ func (msg *IotMsg) GetStrProperty(key string) string {
 	return msg.Properties[key].(string)
 }
 func (msg *IotMsg) SetStrProperty(key string, value string) {
-	if msg.Properties == nil{
+	if msg.Properties == nil {
 		msg.Properties = IotMsgProperties{}
 	}
 	msg.Properties[key] = value
 }
-func (msg *IotMsg) String()(string) {
+func (msg *IotMsg) String() string {
 	return fmt.Sprintf("Type = %v , Class = %v , SubClass = %v \n Default = %v \n Properties = %v \n UUID = %v \n Timestamp = %v \n",
-		msg.Type,msg.Class,msg.SubClass,msg.Default,msg.Properties,msg.Uuid,msg.Timestamp.Format(time.RFC3339))
+		msg.Type, msg.Class, msg.SubClass, msg.Default, msg.Properties, msg.Uuid, msg.Timestamp.Format(time.RFC3339))
 }
