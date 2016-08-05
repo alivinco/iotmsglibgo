@@ -61,6 +61,7 @@ type IotMsg struct {
 	Corid      string
 	Transport  string
 	Version    float32
+	Spid	   string
 }
 
 func NewIotMsg(msgType IotMsgType, msgClass string, msgSubClass string, reqMsg *IotMsg) *IotMsg {

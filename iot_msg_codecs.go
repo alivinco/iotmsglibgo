@@ -77,11 +77,6 @@ func DecodeIotMsgToJsonMsgStrV0 (msg []byte,topic string )(*IotMsg ,error){
 	}
 	switch msgType {
 	case MsgTypeCmd:
-		v0msg := json_types.IotMsgCmdV0{}
-		err := json.Unmarshal(msg,&v0msg)
-		if err != nil{
-			return nil,err
-		}
 		iotMsg = NewIotMsg(MsgTypeCmd,v0msg.Command.Type,v0msg.Command.Subtype,nil)
 		iotMsg.Default.Value = v0msg.Command.Default.Value
 		iotMsg.Default.Unit = v0msg.Command.Default.Unit
@@ -89,11 +84,6 @@ func DecodeIotMsgToJsonMsgStrV0 (msg []byte,topic string )(*IotMsg ,error){
 		iotMsg.Uuid = v0msg.UUID
 		iotMsg.Transport = v0msg.Transport
 	case MsgTypeEvt:
-		v0msg := json_types.IotMsgEvtV0{}
-		err := json.Unmarshal(msg,&v0msg)
-		if err != nil{
-			return nil,err
-		}
 		iotMsg = NewIotMsg(MsgTypeEvt,v0msg.Event.Type,v0msg.Event.Subtype,nil)
 		iotMsg.Default.Value = v0msg.Event.Default.Value
 		iotMsg.Default.Unit = v0msg.Event.Default.Unit
@@ -101,6 +91,7 @@ func DecodeIotMsgToJsonMsgStrV0 (msg []byte,topic string )(*IotMsg ,error){
 		iotMsg.Uuid = v0msg.UUID
 		iotMsg.Transport = v0msg.Transport
 	}
+	iotMsg.Spid = v0msg.Spid
 	return iotMsg , nil
 }
 
