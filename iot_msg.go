@@ -80,19 +80,8 @@ func NewIotMsg(msgType IotMsgType, msgClass string, msgSubClass string, reqMsg *
 func (msg *IotMsg) SetDefaultStr(value string, unit string) {
 	msg.Default = IotMsgDefault{Value: value, Unit: unit, Type: "string"}
 }
-func (msg *IotMsg) GetDefaultStr() (string,error) {
-	switch v := msg.Default.Value.(type) {
-	case float64 , float32:
-		return strconv.FormatFloat(v.(float64), 'f', -1, 64), nil
-	case string:
-		return v , nil
-	case int:
-		return strconv.Itoa(v), nil
-	case bool:
-		return strconv.FormatBool(v) , nil
-	default:
-		return "", errors.New("Variable can't be converted into string")
-	}
+func (msg *IotMsg) GetDefaultStr() (string) {
+	return fmt.Sprintf("%v",msg.Default.Value)
 }
 func (msg *IotMsg) SetDefaultBool(value bool, unit string) {
 	msg.Default = IotMsgDefault{Value: value, Unit: unit, Type: "bool"}
