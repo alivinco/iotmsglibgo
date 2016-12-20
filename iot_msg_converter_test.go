@@ -89,7 +89,13 @@ func TestConvertIotMsgToBytesV1_overrideType(t *testing.T) {
 
 func TestConvertBytesToIotMsgV1(t *testing.T) {
 	t.Log("TestConvertBytesToIotMsgV1")
-	jsonStr :=  `{"type":"evt","cls": "binary","subcls": "switch","def": {"value": true},"props": {"p1": 165}, "ctime": "2016-05-29T15:28:26.013751", "uuid": "e48fbe58-3aaf-442d-b769-7a24aed8b716"}`
+	jsonStr :=  `{"type":"evt",
+			"cls": "binary",
+			"subcls": "switch",
+			"def": {"value": true},
+			"props": {"p1": 165},
+	 		"ctime": "2016-05-29T15:28:26.013751",
+	 		"uuid": "e48fbe58-3aaf-442d-b769-7a24aed8b716"}`
 	byt := []byte(jsonStr)
 	iotMsg,err := ConvertBytesToIotMsg("jim1/evt/ta/zw/1/bin_switch/1",byt,nil)
 	if err != nil {
